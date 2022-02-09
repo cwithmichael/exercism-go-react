@@ -6,7 +6,7 @@ import (
 )
 
 type MyReactor struct {
-	computeCells []*MyComputeCell
+	computeCells []MyComputeCell
 }
 
 func (r *MyReactor) CreateInput(value int) InputCell {
@@ -14,21 +14,21 @@ func (r *MyReactor) CreateInput(value int) InputCell {
 }
 
 func (r *MyReactor) CreateCompute1(cell Cell, cb func(int) int) ComputeCell {
-	r.computeCells = append(r.computeCells, &MyComputeCell{
+	r.computeCells = append(r.computeCells, MyComputeCell{
 		cells:           []Cell{cell},
 		computeFunction: func() int { return cb(cell.Value()) },
 		prevComputed:    cb(cell.Value()),
 	})
-	return r.computeCells[len(r.computeCells)-1]
+	return &r.computeCells[len(r.computeCells)-1]
 }
 
 func (r *MyReactor) CreateCompute2(cell Cell, cell2 Cell, cb func(int, int) int) ComputeCell {
-	r.computeCells = append(r.computeCells, &MyComputeCell{
+	r.computeCells = append(r.computeCells, MyComputeCell{
 		cells:           []Cell{cell, cell2},
 		computeFunction: func() int { return cb(cell.Value(), cell2.Value()) },
 		prevComputed:    cb(cell.Value(), cell2.Value()),
 	})
-	return r.computeCells[len(r.computeCells)-1]
+	return &r.computeCells[len(r.computeCells)-1]
 }
 
 func (r *MyReactor) NotifyComputeCells() {
