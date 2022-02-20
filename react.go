@@ -5,6 +5,10 @@ import (
 	"time"
 )
 
+func init() {
+	rand.Seed(time.Now().UnixNano())
+}
+
 type CellReactor struct {
 	computeCells []ReactiveComputeCell
 }
@@ -39,7 +43,6 @@ func (r *CellReactor) NotifyComputeCells() {
 }
 
 func New() Reactor {
-	rand.Seed(time.Now().UnixNano())
 	return &CellReactor{}
 }
 
@@ -63,12 +66,12 @@ func (ic *StimulusInputCell) SetValue(value int) {
 }
 
 type Cancel struct {
-	cbId int
+	cbID int
 	cc   *ReactiveComputeCell
 }
 
 func (c *Cancel) Cancel() {
-	delete(c.cc.cbs, c.cbId)
+	delete(c.cc.cbs, c.cbID)
 }
 
 type ReactiveComputeCell struct {
@@ -95,7 +98,7 @@ func (cc *ReactiveComputeCell) AddCallback(cb func(value int)) Canceler {
 	if cc.cbs == nil {
 		cc.cbs = make(map[int]func(int))
 	}
-	cbId := rand.Int()
-	cc.cbs[cbId] = cb
-	return &Cancel{cbId: cbId, cc: cc}
+	cbID := rand.Int()
+	cc.cbs[cbID] = cb
+	return &Cancel{cbID: cbID, cc: cc}
 }
